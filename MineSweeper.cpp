@@ -292,17 +292,12 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction) {
                             ty = ay + dy[i];
                             tn = number(tx, ty);
                             if (tx >= 0 && ty >= 0 && tx < 9 && ty < 9) {
-                                //지뢰인데 깃발처리안했으면 게임오버
+                                //깃발처리안된 지뢰있으면 보류 (clear 아님)
                                 if (board[tn] > 8 && (hide[tn] != FLAG)) {
                                     clear = false;
-                                    gameover = true;
-                                    playing = false;
-                                    setObjectImage(piece[tn], imgFileLocate[9]);
-                                    gameOver();
                                     
-                                    return;
                                 }
-                                // 깃발인데 지뢰가 아니여도 게임오버
+                                // 깃발인데 지뢰가 아니면 게임오버
                                 else if (hide[tn] == FLAG && board[tn] < 9) {
                                     clear = false;
                                     gameover = true;
@@ -315,15 +310,17 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction) {
                             
                         }
                         // 자기주변 지뢰는 다 찾은상황
-                        
-                        for (i = 0; i < 8; i++) {
-                            tx = ax + dx[i];
-                            ty = ay + dy[i];
-                            tn = number(tx, ty);
-                            if (tx >= 0 && ty >= 0 && tx < 9 && ty < 9) {
-                                show(tn);
+                        if (clear) {
+                            for (i = 0; i < 8; i++) {
+                                tx = ax + dx[i];
+                                ty = ay + dy[i];
+                                tn = number(tx, ty);
+                                if (tx >= 0 && ty >= 0 && tx < 9 && ty < 9) {
+                                    show(tn);
+                                }
                             }
                         }
+                        
 
                     }
                     // else hide[num] == FLAG -> 깃발을 클릭한 경우로, 아무런 동작 하지않음
